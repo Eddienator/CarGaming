@@ -98,6 +98,8 @@ night_surf = pygame.image.load('Sprites/Night.png')
 night_rect = night_surf.get_rect(topleft = (0,0))
 
 start_surf = pygame.image.load('Sprites/STARTSCREEN.png')
+highscore = read_score()
+highscore_surf = fontObj.render(f"{highscore}",False,(0,0,0))
 
 obstacle_timer = pygame.USEREVENT + 1
 pygame.time.set_timer(obstacle_timer,1100)
@@ -140,9 +142,8 @@ while True:
     if state == "START":
         screen.blit(start_surf,(0,0))
         player.draw(screen)
-        highscore = read_score()
-        if int(current_time) > highscore:
-            write_score(current_time) # Current_time is the score
+        screen.blit(highscore_surf,(375,312))
+
 
 
     if state == "RUNNING":
@@ -176,7 +177,8 @@ while True:
     if state == "LOST":
         screen.fill('Yellow')
         obstacle_group.empty()
-        write_score(int(current_time))
+        if int(current_time) > highscore:
+            write_score(current_time) # Current_time is the score
 
     pygame.display.update()
     clock.tick(60) # 60 FPS Cap
