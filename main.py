@@ -99,6 +99,8 @@ night_rect = night_surf.get_rect(topleft = (0,0))
 
 start_surf = pygame.image.load('Sprites/STARTSCREEN.png')
 
+gameover_surf = pygame.image.load('Sprites/You Suck.png')
+
 obstacle_timer = pygame.USEREVENT + 1
 pygame.time.set_timer(obstacle_timer,1100)
 
@@ -178,7 +180,7 @@ while True:
 
 
     if state == "LOST":
-        screen.fill('Yellow')
+        screen.blit(gameover_surf, (0,0))
         obstacle_group.empty()
         if int(current_time) > highscore:
             write_score(current_time) # Current_time is the score
