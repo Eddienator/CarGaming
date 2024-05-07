@@ -1,6 +1,7 @@
 import pygame
 from random import randint, choice
 import sys
+from math import floor
 
 # Functions
 def display_score():
@@ -12,12 +13,18 @@ def display_score():
 
 def collision_check():
 
-
     if pygame.sprite.spritecollide(player.sprite,obstacle_group,False):
         return True # True if collision is detected
     else:
         return False
 
+def write_score(score):
+    with open("highscore.txt", 'w') as file:
+        file.write(str(floor(score)))
+
+def read_score():
+    with open("highscore.txt", 'r') as file:
+        return int(file.read())
 
 # Classes
 class Player(pygame.sprite.Sprite):
@@ -76,6 +83,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 pygame.display.set_caption("Epic Game")
 clock = pygame.time.Clock()
 
+current_time = 0
 
 fontObj = pygame.font.Font("Fonts/Cool.TTF",40)
 starttime = 0
@@ -132,7 +140,9 @@ while True:
     if state == "START":
         screen.blit(start_surf,(0,0))
         player.draw(screen)
-        print(list(d))
+        highscore = read_score()
+        if int(current_time) > highscore:
+            write_score(current_time) # Current_time is the score
 
 
     if state == "RUNNING":
@@ -166,6 +176,7 @@ while True:
     if state == "LOST":
         screen.fill('Yellow')
         obstacle_group.empty()
+        write_score(int(current_time))
 
     pygame.display.update()
     clock.tick(60) # 60 FPS Cap
