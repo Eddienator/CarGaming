@@ -91,6 +91,8 @@ day_rect = day_surf.get_rect(topleft = (0,0))
 night_surf = pygame.image.load('Sprites/Night.png')
 night_rect = night_surf.get_rect(topleft = (0,0))
 
+start_surf = pygame.image.load('Sprites/STARTSCREEN.png')
+
 obstacle_timer = pygame.USEREVENT + 1
 pygame.time.set_timer(obstacle_timer,1100)
 
@@ -100,7 +102,7 @@ player.add(Player())
 
 obstacle_group = pygame.sprite.Group()
 
-state = "RUNNING"
+state = "START"
 day_night = 1 # True means day, false means night
 
 while True:
@@ -129,7 +131,9 @@ while True:
 
     # Game loop
 
-    #if state == "START":
+    if state == "START":
+        screen.blit(start_surf,(0,0))
+        player.draw(screen)
 
 
     if state == "RUNNING":
