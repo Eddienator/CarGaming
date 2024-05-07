@@ -131,8 +131,6 @@ while True:
         if state == "RUNNING":
             if event.type == obstacle_timer: # Continously adds obstacles
                 obstacle_group.add(Obstacle(choice(["cone","cone"]))) # Currently only cones exist
-        
-
 
         if state == "LOST":
             if event.type == pygame.KEYDOWN:
@@ -148,8 +146,6 @@ while True:
         highscore = read_score()
         highscore_surf = fontObj.render(f"{highscore}",False,(0,0,0))
         screen.blit(highscore_surf,(375,312))
-
-
 
     if state == "RUNNING":
 
@@ -176,8 +172,6 @@ while True:
 
         # Score
         display_score()
-
-
 
     if state == "LOST":
         screen.blit(gameover_surf, (0,0))
