@@ -98,8 +98,6 @@ night_surf = pygame.image.load('Sprites/Night.png')
 night_rect = night_surf.get_rect(topleft = (0,0))
 
 start_surf = pygame.image.load('Sprites/STARTSCREEN.png')
-highscore = read_score()
-highscore_surf = fontObj.render(f"{highscore}",False,(0,0,0))
 
 obstacle_timer = pygame.USEREVENT + 1
 pygame.time.set_timer(obstacle_timer,1100)
@@ -125,10 +123,13 @@ while True:
                 if event.key == pygame.K_SPACE:
                     state = "RUNNING"
                     starttime = pygame.time.get_ticks() / 1000
+                if event.key == pygame.K_p:
+                    write_score(0)
 
         if state == "RUNNING":
             if event.type == obstacle_timer: # Continously adds obstacles
                 obstacle_group.add(Obstacle(choice(["cone","cone"]))) # Currently only cones exist
+        
 
 
         if state == "LOST":
@@ -142,6 +143,8 @@ while True:
     if state == "START":
         screen.blit(start_surf,(0,0))
         player.draw(screen)
+        highscore = read_score()
+        highscore_surf = fontObj.render(f"{highscore}",False,(0,0,0))
         screen.blit(highscore_surf,(375,312))
 
 
