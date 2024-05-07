@@ -4,6 +4,7 @@ import sys
 
 # Functions
 def display_score():
+    global current_time
     current_time = pygame.time.get_ticks() / 1000 - starttime
     score_surf = fontObj.render(f"Score: {int(current_time)}",False,(64,64,64))
     score_rect = score_surf.get_rect(center = (300,50))
@@ -17,9 +18,6 @@ def collision_check():
     else:
         return False
 
-def get_image(sheet, width, height):
-    image = pygame.Surface((width,height)).convert_alpha()
-    return image
 
 # Classes
 class Player(pygame.sprite.Sprite):
@@ -134,6 +132,7 @@ while True:
     if state == "START":
         screen.blit(start_surf,(0,0))
         player.draw(screen)
+        print(list(d))
 
 
     if state == "RUNNING":
