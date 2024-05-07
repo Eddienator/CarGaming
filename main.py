@@ -78,13 +78,14 @@ class Obstacle(pygame.sprite.Sprite):
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
 
+# Initialization
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 pygame.display.set_caption("Epic Game")
 clock = pygame.time.Clock()
-
 current_time = 0
 
+# Surfaces, rects, and texts
 fontObj = pygame.font.Font("Fonts/Cool.TTF",40)
 starttime = 0
 
