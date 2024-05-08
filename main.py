@@ -102,11 +102,8 @@ starttime = 0
 grass_surf = pygame.image.load('Sprites/roadbig.png').convert_alpha()
 grass_rect = grass_surf.get_rect(topleft = (0,570))
 
-day_surf = pygame.image.load('Sprites/Coolsky.png').convert()
+day_surf = pygame.image.load('Sprites/Scrollable-export.png').convert()
 day_rect = day_surf.get_rect(topleft = (0,0))
-
-night_surf = pygame.image.load('Sprites/Night.png')
-night_rect = night_surf.get_rect(topleft = (0,0))
 
 start_surf = pygame.image.load('Sprites/STARTSCREEN.png')
 
@@ -161,10 +158,9 @@ while True:
     if state == "RUNNING":
 
         # Day/Night cycle
-        if day_night == 1:
-            screen.blit(day_surf, day_rect)
-        else:
-            screen.blit(night_surf,night_rect)
+
+        screen.blit(day_surf, day_rect)
+
         screen.blit(grass_surf, grass_rect)
 
         # Obstacles
