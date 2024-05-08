@@ -57,13 +57,23 @@ class Obstacle(pygame.sprite.Sprite):
             cone = pygame.image.load('Sprites/cone.png')
             self.frames = [cone]
             y_pos = grass_rect.top
+        
+        if type == "man":
+            man1 = pygame.image.load('Sprites/ConstructorManBoy Parts/CoolMan1.png')
+            man2 = pygame.image.load('Sprites/ConstructorManBoy Parts/CoolMan2.png')
+            man3 = pygame.image.load('Sprites/ConstructorManBoy Parts/CoolMan3.png')
+            man4 = pygame.image.load('Sprites/ConstructorManBoy Parts/CoolMan4.png')
+            self.frames = [man1,man2,man3,man4]
+            y_pos = grass_rect.top
 
         self.animation_index = 0
         self.image = self.frames[self.animation_index]
         self.rect = self.image.get_rect(midbottom = (randint(900,1100),y_pos))
 
-    def animation_state(self): # We don't have the sprites for animation yet
-        pass 
+    def animation_state(self):
+        self.animation_index += 0.1
+        if self.animation_index >= len(self.frames): self.animation_index = 0
+        self.image = self.frames[int(self.animation_index)]
 
     def destroy(self):
         if self.rect.x < -100:
@@ -131,7 +141,7 @@ while True:
 
         if state == "RUNNING":
             if event.type == obstacle_timer: # Continously adds obstacles
-                obstacle_group.add(Obstacle(choice(["cone","cone"]))) # Currently only cones exist
+                obstacle_group.add(Obstacle(choice(["cone","cone","cone","man"])))
 
         if state == "LOST":
             if event.type == pygame.KEYDOWN:
