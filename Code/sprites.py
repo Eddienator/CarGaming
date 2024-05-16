@@ -14,13 +14,13 @@ class Player(pygame.sprite.Sprite):
     def player_input(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE] and self.rect.bottom >= toproad:
-            self.gravity = -15
+            self.gravity = -12
 
     def apply_gravity(self,dt):
-        self.gravity += 80 * dt  # All movement must include delta time!!
+        self.gravity += 70 * dt  # All movement must include delta time!!
         self.rect.y += self.gravity
         if self.rect.bottom >= toproad:
-            self.rect.bottom = toproad + 10
+            self.rect.bottom = toproad + 5
 
     def update(self,dt):
         self.player_input()

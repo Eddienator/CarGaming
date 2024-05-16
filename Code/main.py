@@ -45,7 +45,7 @@ class Game:
 
         # User event
         self.obstacle_timer = pygame.USEREVENT + 1
-        pygame.time.set_timer(self.obstacle_timer,1100)
+        pygame.time.set_timer(self.obstacle_timer,800)
 
 
     def run(self):
