@@ -4,8 +4,17 @@ from settings import *
 class Player(pygame.sprite.Sprite):
     def __init__(self,groups,scale):
         super().__init__(groups)
-        player_surf = pygame.image.load(join('Sprites','Player','CarDuuuude.png')).convert_alpha()
-        self.image = pygame.transform.scale(player_surf,Vector(player_surf.get_size()) * scale)
+        
+        self.animation_index = 0
+
+        self.frames = []
+        for i in range(1,3):
+            car_image = pygame.image.load(join('Sprites','Player',f'CarDuuuude{i}.png')).convert_alpha()
+            car_frame = pygame.transform.scale(car_image,Vector(car_image.get_size()) * scale)
+
+            self.frames.append(car_frame)
+
+        self.image = self.frames[self.animation_index]
         self.rect = self.image.get_frect(midbottom = (SCREEN_WIDTH / 8,toproad))
         self.gravity = 0
 
@@ -22,9 +31,19 @@ class Player(pygame.sprite.Sprite):
         if self.rect.bottom >= toproad:
             self.rect.bottom = toproad + 5
 
+    def animation(self,dt):
+        self.animation_index += 5 * dt
+        if self.animation_index >= len(self.frames): self.animation_index = 0
+
+        self.image = self.frames[int(self.animation_index)]
+
+        # Mask
+        self.mask = pygame.mask.from_surface(self.image)
+
     def update(self,dt):
         self.player_input()
         self.apply_gravity(dt)
+        self.animation(dt)
 
 class Road(pygame.sprite.Sprite):
     def __init__(self,groups,scale):
