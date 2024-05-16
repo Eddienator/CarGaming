@@ -1,5 +1,5 @@
 from settings import *
-from sprites import Obstacle, Road, BG, Player
+from sprites import Obstacle, Road, BG, Player, Coin
 from math import floor
 
 def write_score(score):
@@ -24,6 +24,7 @@ class Game:
         # Sprite groups
         self.all_sprites = pygame.sprite.Group()
         self.collision_sprites = pygame.sprite.Group()
+        self.coins = pygame.sprite.Group()
 
         # Scale factor
         bg_height = pygame.image.load('Sprites/Background/Scrollable-export.png').get_height()
@@ -41,6 +42,8 @@ class Game:
         self.font = pygame.font.Font(join('Fonts','Cool.TTF'))
         self.highscorefont = pygame.font.Font(join('Fonts','Cool.TTF'),35)
         self.startoffset = 0
+
+        self.obtainedcoins = []
 
 
         # User event
@@ -69,9 +72,11 @@ class Game:
                             self.state = "RUNNING"                    
                 
                 if self.state == "RUNNING":
-                    if event.type == self.obstacle_timer:  # Adds new obstacles
-                        Obstacle([self.collision_sprites,self.all_sprites],choice(self.obstacletypes),self.scale_factor)
-                    
+                    if event.type == self.obstacle_timer:  # Adds new obstacles or coins
+                        if randint(1,100) > 10:
+                            Obstacle([self.collision_sprites,self.all_sprites],choice(self.obstacletypes),self.scale_factor)
+                        else:
+                            Coin([self.coins,self.all_sprites],self.scale_factor)
                 if self.state == "LOST":
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_SPACE:
@@ -117,8 +122,9 @@ class Game:
 
                 # Write highscore?
                 current_highscore = read_score()
-                if self.score > current_highscore:
-                    write_score(self.score)
+                total_score = self.score + len(self.obtainedcoins) * 10
+                if total_score > current_highscore:
+                    write_score(total_score)
                 self.score = 0
 
 
@@ -129,6 +135,10 @@ class Game:
     def check_collisions(self):
         if pygame.sprite.spritecollide(self.player,self.collision_sprites,False,pygame.sprite.collide_mask):
             self.state = "LOST"
+        if pygame.sprite.spritecollide(self.player,self.coins,True,pygame.sprite.collide_mask):
+            self.obtainedcoins.append(1)
+            
+        
 
     def scorecounter(self):
         self.score = int((pygame.time.get_ticks() - self.startoffset) / 1000)

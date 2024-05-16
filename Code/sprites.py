@@ -151,3 +151,25 @@ class BG(pygame.sprite.Sprite):
     def update(self,dt):
         self.animate(dt)
 
+class Coin(pygame.sprite.Sprite):
+    def __init__(self,groups,scale):
+        super().__init__(groups)
+
+        self.pos = Vector(SCREEN_WIDTH + randint(100,300), toproad)
+        self.image = pygame.image.load(join('Sprites','Teh Coin.png')).convert_alpha()
+        self.frame = pygame.transform.scale(self.image,Vector(self.image.get_size()) * scale)
+
+        self.mask = pygame.mask.from_surface(self.image)
+
+    def move(self, dt):
+        self.direction = -750 * dt
+        self.pos.x += self.direction
+        self.rect = self.image.get_frect(midbottom = self.pos)
+
+    def destroy(self):
+        if self.pos.x <= -100:
+            self.kill() # Removes itself from the game
+
+    def update(self,dt):
+        self.move(dt)
+        self.destroy()
