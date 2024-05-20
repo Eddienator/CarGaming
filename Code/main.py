@@ -1,5 +1,5 @@
 from settings import *
-from sprites import Obstacle, Road, BG, Player, Coin
+from sprites import Obstacle, Road, BG, Player, Coin, FloatingRoad
 from math import floor
 
 def write_score(score):
@@ -25,6 +25,7 @@ class Game:
         self.all_sprites = pygame.sprite.Group()
         self.collision_sprites = pygame.sprite.Group()
         self.coins = pygame.sprite.Group()
+        self.floatingroad = pygame.sprite.Group()
 
         # Scale factor
         bg_height = pygame.image.load('Sprites/Background/Scrollable-export.png').get_height()
@@ -77,6 +78,8 @@ class Game:
                             Obstacle([self.collision_sprites,self.all_sprites],choice(self.obstacletypes),self.scale_factor)
                         else:
                             Coin([self.coins,self.all_sprites],self.scale_factor)
+
+                        FloatingRoad([self.all_sprites,self.floatingroad],self.scale_factor)
                 if self.state == "LOST":
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_SPACE:
@@ -108,7 +111,7 @@ class Game:
                 self.all_sprites.draw(self.screen)
                 self.scorecounter()
 
-                self.check_collisions()
+                self.check_collisions() 
 
 
             if self.state == "LOST":
@@ -128,8 +131,6 @@ class Game:
                 self.score = 0
                 self.obtainedcoins.clear()
 
-
-
             pygame.display.update()
             self.clock.tick(FRAMERATE)
 
@@ -138,7 +139,10 @@ class Game:
             self.state = "LOST"
         if pygame.sprite.spritecollide(self.player,self.coins,True,pygame.sprite.collide_mask):
             self.obtainedcoins.append(1)
-            
+        if pygame.sprite.spritecollide(self.player,self.floatingroad,False,pygame.sprite.collide_mask):
+            self.player.rect.bottom = 625
+            self.player.gravity = 1 
+        
         
 
     def scorecounter(self):
@@ -146,7 +150,8 @@ class Game:
         score_surf = self.font.render(str(self.score),False,(0,0,0))
         score_surf = pygame.transform.scale(score_surf,Vector(score_surf.get_size()) * self.scale_factor)
         score_rect = score_surf.get_frect(center = (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 10))
-        self.screen.blit(score_surf, score_rect)
+        self.screen.blit(score_surf, score_rect) 
+
 
 if __name__ == '__main__':
     game = Game()

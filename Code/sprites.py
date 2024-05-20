@@ -6,6 +6,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__(groups)
         
         self.animation_index = 0
+        self.isGrounded = False
 
         self.frames = []
         for i in range(1,3):
@@ -22,7 +23,7 @@ class Player(pygame.sprite.Sprite):
 
     def player_input(self):
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_SPACE] and self.rect.bottom >= toproad:
+        if keys[pygame.K_SPACE] and self.isGrounded == True:
             self.gravity = -12
 
     def apply_gravity(self,dt):
@@ -30,6 +31,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.gravity
         if self.rect.bottom >= toproad:
             self.rect.bottom = toproad + 5
+            self.gravity = 1
 
     def animation(self,dt):
         self.animation_index += 5 * dt
@@ -40,10 +42,19 @@ class Player(pygame.sprite.Sprite):
         # Mask
         self.mask = pygame.mask.from_surface(self.image)
 
+    def isplayergrounded(self):
+        if self.gravity < 1 and self.gravity > (-1):
+            self.isGrounded == True
+        else:   
+            self.isGrounded == False
+
     def update(self,dt):
         self.player_input()
         self.apply_gravity(dt)
         self.animation(dt)
+        self.isplayergrounded()
+
+
 
 class Road(pygame.sprite.Sprite):
     def __init__(self,groups,scale):
@@ -115,7 +126,7 @@ class Obstacle(pygame.sprite.Sprite):
             self.kill() # Removes itself from the game
 
     def move(self, dt):
-        self.direction = -750 * dt
+        self.direction = -650 * dt
         self.pos.x += self.direction
         self.rect = self.image.get_frect(midbottom = self.pos)
 
@@ -157,7 +168,8 @@ class Coin(pygame.sprite.Sprite):
 
         self.pos = Vector(SCREEN_WIDTH + randint(100,300), toproad)
         self.image = pygame.image.load(join('Sprites','Teh Coin.png')).convert_alpha()
-        self.frame = pygame.transform.scale(self.image,Vector(self.image.get_size()) * scale)
+        fullimage = pygame.transform.scale(self.image,Vector(self.image.get_size()) * scale)
+        self.image = fullimage
 
         self.mask = pygame.mask.from_surface(self.image)
 
@@ -169,6 +181,33 @@ class Coin(pygame.sprite.Sprite):
     def destroy(self):
         if self.pos.x <= -100:
             self.kill() # Removes itself from the game
+
+    def update(self,dt):
+        self.move(dt)
+        self.destroy()
+
+
+class FloatingRoad(pygame.sprite.Sprite):
+    def __init__(self, groups, scale):
+        super().__init__(groups)
+        self.length = randint(2,6)
+
+        self.pos = Vector(SCREEN_WIDTH + randint(100,300), toproad-200)
+        self.image = pygame.image.load(join('Sprites','Road','Rhoade island.png')).convert_alpha()
+        fullimage = pygame.transform.scale(self.image,Vector(self.image.get_size()) * scale)
+        self.image = fullimage
+
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect = self.image.get_frect(topleft = self.pos)
+
+
+        
+    def destroy(self):
+        if self.rect.x <= -100:
+            self.kill() # Removes itself from the game
+
+    def move(self, dt):
+        self.rect.x -= 650 * dt
 
     def update(self,dt):
         self.move(dt)
