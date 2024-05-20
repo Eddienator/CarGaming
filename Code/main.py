@@ -122,10 +122,11 @@ class Game:
 
                 # Write highscore?
                 current_highscore = read_score()
-                total_score = self.score + len(self.obtainedcoins) * 10
+                total_score = self.score
                 if total_score > current_highscore:
                     write_score(total_score)
                 self.score = 0
+                self.obtainedcoins.clear()
 
 
 
@@ -141,7 +142,7 @@ class Game:
         
 
     def scorecounter(self):
-        self.score = int((pygame.time.get_ticks() - self.startoffset) / 1000)
+        self.score = int(((pygame.time.get_ticks() - self.startoffset) / 1000)+len(self.obtainedcoins) * 10)
         score_surf = self.font.render(str(self.score),False,(0,0,0))
         score_surf = pygame.transform.scale(score_surf,Vector(score_surf.get_size()) * self.scale_factor)
         score_rect = score_surf.get_frect(center = (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 10))
