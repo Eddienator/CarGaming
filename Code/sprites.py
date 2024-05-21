@@ -183,20 +183,16 @@ class Coin(pygame.sprite.Sprite):
 
 
 class FloatingRoad(pygame.sprite.Sprite):
-    def __init__(self, groups, scale):
+    def __init__(self, groups, scale, k):
         super().__init__(groups)
-        self.length = randint(2,6)
-
-        self.pos = Vector(SCREEN_WIDTH + randint(100,300), toproad-200)
+        self.pos = Vector(SCREEN_WIDTH + (k*100), toproad-200)
         self.image = pygame.image.load(join('Sprites','Road','Rhoade island.png')).convert_alpha()
         fullimage = pygame.transform.scale(self.image,Vector(self.image.get_size()) * scale)
         self.image = fullimage
-
         
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_frect(topleft = self.pos)
-
-
+            
         
     def destroy(self):
         if self.rect.x <= -100:

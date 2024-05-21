@@ -65,6 +65,7 @@ class Game:
                 if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     sys.exit("Game Stopped by Player")
+                
 
                 if self.state == "START":
                     if event.type == pygame.KEYDOWN:
@@ -79,11 +80,13 @@ class Game:
                         else:
                             Coin([self.coins,self.all_sprites],self.scale_factor)
 
-                        FloatingRoad([self.all_sprites,self.floatingroad],self.scale_factor)
+                        for i in range(1,randint(2,4)):
+                            FloatingRoad([self.all_sprites,self.floatingroad],self.scale_factor, i)
                 if self.state == "LOST":
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_SPACE:
-
+                            Game.run()  
+                            pygame.quit()
                             # Restarts if the player presses SPACE.
 
                             BG(self.all_sprites,self.scale_factor)
@@ -140,11 +143,14 @@ class Game:
         if pygame.sprite.spritecollide(self.player,self.coins,True,pygame.sprite.collide_mask):
             self.obtainedcoins.append(1)
         if pygame.sprite.spritecollide(self.player,self.floatingroad,False,pygame.sprite.collide_mask):
-            self.player.rect.bottom = 625
-            self.player.gravity = 1  
-            self.player.isGrounded = True
-        
-        
+            if self.player.gravity > 0:
+                self.player.rect.bottom = 625
+                self.player.gravity = 0  
+                self.player.isGrounded = True
+            else:
+                self.player.rect.bottom = 700
+                self.player.gravity = 1
+            
 
     def scorecounter(self):
         self.score = int(((pygame.time.get_ticks() - self.startoffset) / 1000)+len(self.obtainedcoins) * 10)
