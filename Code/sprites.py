@@ -23,15 +23,17 @@ class Player(pygame.sprite.Sprite):
 
     def player_input(self):
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_SPACE] and self.isGrounded == True:
+        if keys[pygame.K_SPACE] and self.isGrounded:
             self.gravity = -12
+            self.isGrounded = False
 
     def apply_gravity(self,dt):
         self.gravity += 70 * dt  # All movement must include delta time!!
-        self.rect.y += self.gravity
+        self.rect.bottom += self.gravity
         if self.rect.bottom >= toproad:
             self.rect.bottom = toproad + 5
             self.gravity = 1
+            self.isGrounded = True
 
     def animation(self,dt):
         self.animation_index += 5 * dt
@@ -42,17 +44,10 @@ class Player(pygame.sprite.Sprite):
         # Mask
         self.mask = pygame.mask.from_surface(self.image)
 
-    def isplayergrounded(self):
-        if self.gravity < 1 and self.gravity > (-1):
-            self.isGrounded == True
-        else:   
-            self.isGrounded == False
-
     def update(self,dt):
         self.player_input()
         self.apply_gravity(dt)
         self.animation(dt)
-        self.isplayergrounded()
 
 
 
@@ -197,6 +192,7 @@ class FloatingRoad(pygame.sprite.Sprite):
         fullimage = pygame.transform.scale(self.image,Vector(self.image.get_size()) * scale)
         self.image = fullimage
 
+        
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_frect(topleft = self.pos)
 

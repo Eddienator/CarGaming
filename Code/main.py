@@ -141,7 +141,8 @@ class Game:
             self.obtainedcoins.append(1)
         if pygame.sprite.spritecollide(self.player,self.floatingroad,False,pygame.sprite.collide_mask):
             self.player.rect.bottom = 625
-            self.player.gravity = 1 
+            self.player.gravity = 1  
+            self.player.isGrounded = True
         
         
 
