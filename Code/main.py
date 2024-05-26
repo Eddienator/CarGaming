@@ -85,15 +85,17 @@ class Game:
                 if self.state == "LOST":
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_SPACE:
-                            Game.run()  
-                            pygame.quit()
-                            # Restarts if the player presses SPACE.
+                            
+                            self.newgame = Game()
+                            self.newgame.run() 
+                            pygame.quit() 
+                        """                             # Restarts if the player presses SPACE.
 
                             BG(self.all_sprites,self.scale_factor)
                             Road(self.all_sprites,self.scale_factor)
                             self.player = Player(self.all_sprites,self.scale_factor)
                             self.startoffset = pygame.time.get_ticks()
-                            self.state = "RUNNING"
+                            self.state = "RUNNING" """
 
             if self.state == "START":
                 self.startscreen_surf = pygame.image.load(join('Sprites','StartandGameOver','STARTSCREEN.png'))
